@@ -1,0 +1,35 @@
+{
+  "name": "vamoYvamo",
+  "version": "0.0.0",
+  "description": "vamoYvamo app",
+  "author": "8588k Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/8588k/vamoYvamo.git"
+  },
+  "homepage": "https://github.com/8588k/vamoYvamo",
+  "devDependencies": {
+    "del": "^1.2.0",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^2.3.1",
+    "gulp-concat": "^2.5.2",
+    "gulp-declare": "^0.3.0",
+    "gulp-handlebars": "^4.0.0",
+    "gulp-imagemin": "^2.2.1",
+    "gulp-jshint": "^1.11.0",
+    "gulp-minify-css": "^1.1.6",
+    "gulp-rename": "^1.2.2",
+    "gulp-size": "^1.2.1",
+    "gulp-uglify": "^1.2.0",
+    "gulp-wrap": "^0.11.0",
+    "jshint-stylish": "^2.0.0"
+  },
+  "dependencies": {
+    "backbone": "^1.2.1",
+    "backbone.marionette": "^2.4.2",
+    "handlebars": "^3.0.3",
+    "jquery": "^2.1.4",
+    "underscore": "^1.8.3"
+  }
+}
