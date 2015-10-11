@@ -48,6 +48,10 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
                 that.removeLastPerson(peopleCollection);
             });
 
+            App.Events.on('add-people', function() {
+                that.addPeople(peopleCollection);
+            });
+
             // totalView = new Views.Total();
             // this.totalRegion.show(totalView);
         },
@@ -60,6 +64,31 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
         removeLastPerson: function(collectionInstance) {
             var popModel = collectionInstance.pop();
             if (popModel) popModel.destroy();
+        },
+
+        addPeople: function(collectionInstance) {
+            var $el = $('.person-number'),
+                peopleQuantity = $el.val(),
+                peopleDiff = peopleQuantity - collectionInstance.length,
+                peopleDiffAbs = Math.abs(peopleDiff);
+
+            window.mati = collectionInstance;
+
+            if (peopleQuantity >= 50) {
+                $el.val(collectionInstance.length);
+                return;
+            }
+
+            if (peopleDiff > 0) {
+                for (var i = 0; i < peopleDiffAbs; i+=1) {
+                    this.addPerson(collectionInstance);
+                }
+            } else if (peopleDiff < 0) {
+                for (var i = 0; i < peopleDiffAbs; i+=1) {
+                    this.removeLastPerson(collectionInstance);
+                }
+            }
         }
+
     });
 });

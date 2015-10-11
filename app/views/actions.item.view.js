@@ -20,9 +20,7 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
             'input @ui.personNumber': 'addPeople'
         },
 
-        initialize: function() {
-            console.log("inicia actions");
-        },
+        initialize: function() {},
 
         addPerson: function(){
             App.Events.trigger('add-person');
@@ -30,6 +28,11 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
 
         removeLastPerson: function() {
             App.Events.trigger('remove-person');
+        },
+
+        addPeople: function() {
+            App.Events.trigger('add-people');
         }
+
     });
 });

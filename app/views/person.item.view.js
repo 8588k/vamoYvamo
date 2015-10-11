@@ -10,8 +10,7 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
 
         template: __templates.vamo.person,
 
-        initialize: function() {
-            console.log("inicia persona");
-        },
+        initialize: function() {}
+
     });
 });
