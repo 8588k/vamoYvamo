@@ -51,7 +51,6 @@ gulp.task('js-build', function() {
         'node_modules/materialize-css/dist/js/materialize.js',
         'node_modules/backbone/backbone.js',
         'node_modules/backbone.marionette/lib/backbone.marionette.js',
-        // 'bower_components/jquery-mockjax/dist/jquery.mockjax.min.js',
         // app
         'app/app.js',
         'app/vamoYvamo.module.js',
@@ -63,8 +62,7 @@ gulp.task('js-build', function() {
         'app/views/actions.item.view.js',
         'app/views/person.item.view.js',
         'app/views/people.collection.view.js',
-        // 'app/router.js',
-        // 'mocks/mock.js'
+        'app/views/total.item.view.js'
     ])
     .pipe(concat('bundle.js'))
     .pipe(size({

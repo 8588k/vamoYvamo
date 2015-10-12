@@ -26981,7 +26981,7 @@ this["__templates"]["vamo"]["actions"] = Handlebars.template({"compiler":[6,">= 
     return "<label for=\"personNumber\">Personas:</label><input type=\"number\" value=\"2\" min=\"0\" max=\"99\" id=\"personNumber\" class=\"person-number\" pattern=\"[0-9]{10}\">\n<input type=\"button\" value=\"+\" class=\"add\">\n<input type=\"button\" value=\"-\" class=\"remove\">";
 },"useData":true});
 this["__templates"]["vamo"]["main"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<header data-js=\"header\">Header</header>\n<div data-js=\"actions\">Actions</div>\n<div data-js=\"rows\">Rows</div>";
+    return "<header data-js=\"header\">Header</header>\n<div data-js=\"actions\">Actions</div>\n<div data-js=\"rows\">Rows</div>\n<div class=\"total-price\" data-js=\"total\">Total</div>";
 },"useData":true});
 this["__templates"]["vamo"]["person"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
     var helper;
@@ -26997,6 +26997,9 @@ this["__templates"]["vamo"]["person"] = Handlebars.template({"1":function(depth0
     + "\" >\n<span class=\"person-price\">\n	$ <input type=\"number\" placeholder=\"0\" "
     + ((stack1 = (helpers.compare || (depth0 && depth0.compare) || alias1).call(depth0,(depth0 != null ? depth0.money : depth0),0,{"name":"compare","hash":{"operator":"!="},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + " min=\"0\" max=\"999999\" pattern=\"[0-9]{10}\">\n</span>\n<span class=\"status\"></span>\n<span class=\"icon-remove\"></span>";
+},"useData":true});
+this["__templates"]["vamo"]["total"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    return "<p>Precio total: $ <span>0</span></p>";
 },"useData":true});
 Handlebars.registerHelper('compare', function(lvalue, rvalue, options) {
     if (arguments.length < 3)
@@ -27113,18 +27116,33 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
                 that.addPeople(peopleCollection);
             });
 
-            // totalView = new Views.Total();
-            // this.totalRegion.show(totalView);
+            App.Events.on('people-calculate', function() {
+                that.calculate(peopleCollection);
+            });
+
+            App.Events.on('refresh-people-quantity', function() {
+                that.refreshPeopleQuantity(peopleCollection);
+            });
+
+            totalView = new Views.Total();
+            this.totalRegion.show(totalView);
         },
 
         addPerson: function(collectionInstance) {
             var personInstance = new App.Vamo.Models.Person();
-                collectionInstance.add(personInstance);
+
+            collectionInstance.add(personInstance);
+            this.calculate(collectionInstance);
+            this.refreshPeopleQuantity(collectionInstance);
         },
 
         removeLastPerson: function(collectionInstance) {
             var popModel = collectionInstance.pop();
+
             if (popModel) popModel.destroy();
+
+            this.calculate(collectionInstance);
+            this.refreshPeopleQuantity(collectionInstance);
         },
 
         addPeople: function(collectionInstance) {
@@ -27132,8 +27150,6 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
                 peopleQuantity = $el.val(),
                 peopleDiff = peopleQuantity - collectionInstance.length,
                 peopleDiffAbs = Math.abs(peopleDiff);
-
-            window.mati = collectionInstance;
 
             if (peopleQuantity >= 50) {
                 $el.val(collectionInstance.length);
@@ -27149,7 +27165,30 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
                     this.removeLastPerson(collectionInstance);
                 }
             }
-        }
+
+            this.calculate(collectionInstance);
+        },
+
+        calculate: function(collectionInstance) {
+            var $totalEl = $('.total-price span'),
+                total = 0,
+                modelMoney,
+                totalPerPerson;
+
+            _.each(collectionInstance.models, function(model, i) {
+                modelMoney = parseInt(model.get('money'), 10);
+                total = total + modelMoney;
+            });
+
+            $totalEl.html(total);
+            totalPerPerson = total / collectionInstance.length;
+
+            App.Events.trigger('person-message', totalPerPerson);
+        },
+
+        refreshPeopleQuantity: function(collectionInstance) {
+            $('.people-quantity input[type="number"]').val(collectionInstance.length);
+        },
 
     });
 });
@@ -27203,8 +27242,89 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
 
         template: __templates.vamo.person,
 
-        initialize: function() {}
+        ui: {
+            money: 'input[type="number"]',
+            name: 'input[type="text"]',
+            trash: '.icon-remove'
+        },
 
+        events: {
+            'input @ui.money': 'moneyChange',
+            'input @ui.name': 'nameChange',
+            'click @ui.trash': 'removePerson'
+        },
+
+        initialize: function() {
+            var that = this;
+
+            App.Events.on('person-message', function(peopleTotal) {
+                that.refreshStatusMsg(peopleTotal);
+            });
+        },
+
+        moneyChange: function() {
+            var $moneyInput = this.$el.find('input[type="number"]'),
+                newMoneyValue = $moneyInput.val();
+
+            if ( /^[0-9]+$/.test(newMoneyValue) ) {
+                // Si es un número, lo guardo
+                this.model.set({
+                    'money': newMoneyValue
+                });
+            } else {
+                // Si el input está vacio, guardo 0
+                if ($moneyInput.val() === "") {
+                    this.model.set({
+                        'money': 0
+                    });
+                } else {
+                    // Si no es un número, dejo que el valor del input sea el último guardado
+                    $moneyInput.val(this.model.get('money'));
+                }
+            }
+
+            App.Events.trigger('people-calculate');
+        },
+
+        nameChange: function() {
+            this.model.set({
+                'name': this.$el.find('input[type="text"]').val()
+            });
+        },
+
+        removePerson: function() {
+            var that = this;
+
+            this.model.destroy({
+                success: function() {
+                    that.remove();
+                }
+            });
+
+            App.Events.trigger('refresh-people-quantity');
+            App.Events.trigger('people-calculate');
+        },
+
+        refreshStatusMsg: function(totalPerPerson) {
+            var $statusEl = this.$('.status'),
+                modelMoney = this.model.get('money'),
+                result;
+
+            $statusEl.attr('class', 'status');
+
+            if (totalPerPerson < modelMoney) {
+                result = modelMoney - totalPerPerson;
+                $statusEl.addClass('status-receive');
+                $statusEl.html('Recibe $' + result.toFixed(2));
+            } else if (totalPerPerson > modelMoney) {
+                result = totalPerPerson - modelMoney;
+                $statusEl.addClass('status-pay');
+                $statusEl.html('Paga $' + result.toFixed(2));
+            } else {
+                $statusEl.addClass('status-ok');
+                $statusEl.html('Está hecho');
+            }
+        }
     });
 });
 // 'use strict';
@@ -27215,10 +27335,20 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
 
         tagName: 'ul',
 
-        childView: Views.Person,
+        className: 'rows-container',
 
-        initialize: function() {}
+        childView: Views.Person
 
     });
 
+});
+// 'use strict';
+
+App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {    
+    
+    Views.Total = Marionette.ItemView.extend({
+
+        template: __templates.vamo.total
+
+    });
 });

@@ -8211,13 +8211,14 @@ input::-webkit-inner-spin-button {
         border: 1px solid #ddd;
         font-size: 16px;
         text-align: center;
-        padding: 9px 20px;
+        padding: 8px 20px 10px;
         border-radius: 3px 0 0 3px;
     }
 
     .people-quantity input[type="number"] {
         border-left: none;
         border-radius: 0 3px 3px 0;
+        margin-bottom: 0;
         width: 30px;
     }
 
@@ -8241,6 +8242,15 @@ input::-webkit-inner-spin-button {
     }
 
 
+/* Rows
+---------------------------------------------------------------*/
+
+.rows-container {
+    margin: 0;
+    padding-bottom: 60px;
+}
+
+
 /* People
 ---------------------------------------------------------------*/
 
@@ -8261,10 +8271,12 @@ input::-webkit-inner-spin-button {
 .person {
     border-top: 1px solid #ddd;
     margin-bottom: 10px;
+    min-height: 94px;
     padding: 10px 10px 15px 10px;
 }
 
     .person input[type="text"] {
+        margin-bottom: 0;
         width: 50%;
     }
 
@@ -8275,6 +8287,7 @@ input::-webkit-inner-spin-button {
 }
 
     .person-price input[type="number"] {
+        margin-bottom: 0;
         width: 60%;
     }
 
@@ -8315,10 +8328,12 @@ input::-webkit-inner-spin-button {
 ---------------------------------------------------------------*/
 
 .total-price {
+    background-color: #f7f7f7;
     border-top: 1px solid #ddd;
     bottom: 0;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
     padding: 20px 0;
-    position: absolute;
+    position: fixed;
     text-align: center;
     width: 100%;
 }

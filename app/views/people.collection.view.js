@@ -6,9 +6,9 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
 
         tagName: 'ul',
 
-        childView: Views.Person,
+        className: 'rows-container',
 
-        initialize: function() {}
+        childView: Views.Person
 
     });
 

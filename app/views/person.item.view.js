@@ -22,7 +22,13 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
             'click @ui.trash': 'removePerson'
         },
 
-        initialize: function() {},
+        initialize: function() {
+            var that = this;
+
+            App.Events.on('person-message', function(peopleTotal) {
+                that.refreshStatusMsg(peopleTotal);
+            });
+        },
 
         moneyChange: function() {
             var $moneyInput = this.$el.find('input[type="number"]'),
@@ -44,6 +50,8 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
                     $moneyInput.val(this.model.get('money'));
                 }
             }
+
+            App.Events.trigger('people-calculate');
         },
 
         nameChange: function() {
@@ -55,14 +63,35 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
         removePerson: function() {
             var that = this;
 
-            console.log("removePerson");
-
             this.model.destroy({
                 success: function() {
                     that.remove();
                 }
             });
-        }
 
+            App.Events.trigger('refresh-people-quantity');
+            App.Events.trigger('people-calculate');
+        },
+
+        refreshStatusMsg: function(totalPerPerson) {
+            var $statusEl = this.$('.status'),
+                modelMoney = this.model.get('money'),
+                result;
+
+            $statusEl.attr('class', 'status');
+
+            if (totalPerPerson < modelMoney) {
+                result = modelMoney - totalPerPerson;
+                $statusEl.addClass('status-receive');
+                $statusEl.html('Recibe $' + result.toFixed(2));
+            } else if (totalPerPerson > modelMoney) {
+                result = totalPerPerson - modelMoney;
+                $statusEl.addClass('status-pay');
+                $statusEl.html('Paga $' + result.toFixed(2));
+            } else {
+                $statusEl.addClass('status-ok');
+                $statusEl.html('Está hecho');
+            }
+        }
     });
 });

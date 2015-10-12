@@ -52,18 +52,33 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
                 that.addPeople(peopleCollection);
             });
 
-            // totalView = new Views.Total();
-            // this.totalRegion.show(totalView);
+            App.Events.on('people-calculate', function() {
+                that.calculate(peopleCollection);
+            });
+
+            App.Events.on('refresh-people-quantity', function() {
+                that.refreshPeopleQuantity(peopleCollection);
+            });
+
+            totalView = new Views.Total();
+            this.totalRegion.show(totalView);
         },
 
         addPerson: function(collectionInstance) {
             var personInstance = new App.Vamo.Models.Person();
-                collectionInstance.add(personInstance);
+
+            collectionInstance.add(personInstance);
+            this.calculate(collectionInstance);
+            this.refreshPeopleQuantity(collectionInstance);
         },
 
         removeLastPerson: function(collectionInstance) {
             var popModel = collectionInstance.pop();
+
             if (popModel) popModel.destroy();
+
+            this.calculate(collectionInstance);
+            this.refreshPeopleQuantity(collectionInstance);
         },
 
         addPeople: function(collectionInstance) {
@@ -71,8 +86,6 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
                 peopleQuantity = $el.val(),
                 peopleDiff = peopleQuantity - collectionInstance.length,
                 peopleDiffAbs = Math.abs(peopleDiff);
-
-            window.mati = collectionInstance;
 
             if (peopleQuantity >= 50) {
                 $el.val(collectionInstance.length);
@@ -88,7 +101,30 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
                     this.removeLastPerson(collectionInstance);
                 }
             }
-        }
+
+            this.calculate(collectionInstance);
+        },
+
+        calculate: function(collectionInstance) {
+            var $totalEl = $('.total-price span'),
+                total = 0,
+                modelMoney,
+                totalPerPerson;
+
+            _.each(collectionInstance.models, function(model, i) {
+                modelMoney = parseInt(model.get('money'), 10);
+                total = total + modelMoney;
+            });
+
+            $totalEl.html(total);
+            totalPerPerson = total / collectionInstance.length;
+
+            App.Events.trigger('person-message', totalPerPerson);
+        },
+
+        refreshPeopleQuantity: function(collectionInstance) {
+            $('.people-quantity input[type="number"]').val(collectionInstance.length);
+        },
 
     });
 });
