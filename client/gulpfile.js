@@ -21,13 +21,13 @@ var gulp = require('gulp'),
  */
 
 gulp.task('del-build', function() {
-    del.sync(['build/*'], function(err) {
-        console.log("build/ files deleted");
+    del.sync(['www/build/*'], function(err) {
+        console.log("www/build/ files deleted");
     });
 });
 
 gulp.task('templates', function(){
-    gulp.src(['app/templates/**/*.hbs'])
+    gulp.src(['www/app/templates/**/*.hbs'])
         .pipe(handlebars())
         .pipe(wrap('Handlebars.template(<%= contents %>)'))
         .pipe(declare({
@@ -38,7 +38,7 @@ gulp.task('templates', function(){
         .pipe(size({
             title: 'JS size:'
         }))
-        .pipe(gulp.dest('app/templates/'));
+        .pipe(gulp.dest('www/app/templates/'));
 });
 
 // ['templates'],
@@ -53,29 +53,29 @@ gulp.task('js-build', function() {
         'node_modules/backbone.marionette/lib/backbone.marionette.js',
         'node_modules/fastclick/lib/fastclick.js',
         // app
-        'app/app.js',
-        'app/vamoYvamo.module.js',
-        'app/templates/templates.js',
-        'app/utils/handlebars-helpers.js',
-        'app/models/*.js',
-        'app/collections/*.js',
-        'app/views/main.layout.view.js',
-        'app/views/actions.item.view.js',
-        'app/views/person.item.view.js',
-        'app/views/people.collection.view.js',
-        'app/views/total.item.view.js'
+        'www/app/app.js',
+        'www/app/vamoYvamo.module.js',
+        'www/app/templates/templates.js',
+        'www/app/utils/handlebars-helpers.js',
+        'www/app/models/*.js',
+        'www/app/collections/*.js',
+        'www/app/views/main.layout.view.js',
+        'www/app/views/actions.item.view.js',
+        'www/app/views/person.item.view.js',
+        'www/app/views/people.collection.view.js',
+        'www/app/views/total.item.view.js'
     ])
     .pipe(concat('bundle.js'))
     .pipe(size({
         title: 'JS size:'
     }))
-    .pipe(gulp.dest('build/scripts/'));
+    .pipe(gulp.dest('www/build/scripts/'));
 });
 
 gulp.task('styles-build', function() {
     gulp.src([
             'node_modules/materialize-css/dist/css/materialize.css',
-            'app/styles/*.css'
+            'www/app/styles/*.css'
         ])
         .pipe(autoprefixer({
             browsers: ['last 5 versions','Firefox ESR']
@@ -84,7 +84,7 @@ gulp.task('styles-build', function() {
         .pipe(size({
             title: 'CSS size:'
         }))
-        .pipe(gulp.dest('build/styles/'));
+        .pipe(gulp.dest('www/build/styles/'));
 });
 
 // gulp.task('default', ['del-build', 'templates', 'js-build', 'styles-build']);
@@ -96,10 +96,10 @@ gulp.task('watch', function() {
     gulp.start('default');
     gulp.watch([
         'gulpfile.js',
-        'app/templates/**/*.hbs',
-        'app/*.js',
-        'app/**/*.js',
+        'www/app/templates/**/*.hbs',
+        'www/app/*.js',
+        'www/app/**/*.js',
         // 'mocks/mock.js'
     ], ['default']);
-    gulp.watch('app/styles/*.css', ['styles-build']);
+    gulp.watch('www/app/styles/*.css', ['styles-build']);
 });
