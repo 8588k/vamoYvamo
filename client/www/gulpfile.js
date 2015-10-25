@@ -21,7 +21,7 @@ var gulp = require('gulp'),
  */
 
 gulp.task('del-build', function() {
-    del(['build/*'], function(err) {
+    del.sync(['build/*'], function(err) {
         console.log("build/ files deleted");
     });
 });
