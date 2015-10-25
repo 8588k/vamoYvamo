@@ -25,6 +25,7 @@
     // Start App app
     $(function() {
         App.start();
+        FastClick.attach(document.body);
     });
     
 }(window));

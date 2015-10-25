@@ -19,7 +19,7 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
         events: {
             'input @ui.money': 'moneyChange',
             'input @ui.name': 'nameChange',
-            'click @ui.trash': 'removePerson'
+            'touchstart @ui.trash': 'removePerson'
         },
 
         initialize: function() {
@@ -69,6 +69,7 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
                 }
             });
 
+            App.Events.trigger('button-pressed', event);
             App.Events.trigger('refresh-people-quantity');
             App.Events.trigger('people-calculate');
         },

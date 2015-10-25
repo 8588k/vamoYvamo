@@ -15,22 +15,25 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
         },
 
         events: {
-            'click @ui.add': 'addPerson',
-            'click @ui.remove': 'removeLastPerson',
+            'touchstart @ui.add': 'addPerson',
+            'touchstart @ui.remove': 'removeLastPerson',
             'input @ui.personNumber': 'addPeople'
         },
 
         initialize: function() {},
 
-        addPerson: function(){
+        addPerson: function(event){
+            App.Events.trigger('button-pressed', event);
             App.Events.trigger('add-person');
         },
 
-        removeLastPerson: function() {
+        removeLastPerson: function(event) {
+            App.Events.trigger('button-pressed', event);
             App.Events.trigger('remove-person');
         },
 
-        addPeople: function() {
+        addPeople: function(event) {
+            App.Events.trigger('button-pressed', event);
             App.Events.trigger('add-people');
         }
 

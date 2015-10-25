@@ -51,6 +51,7 @@ gulp.task('js-build', function() {
         'node_modules/materialize-css/dist/js/materialize.js',
         'node_modules/backbone/backbone.js',
         'node_modules/backbone.marionette/lib/backbone.marionette.js',
+        'node_modules/fastclick/lib/fastclick.js',
         // app
         'app/app.js',
         'app/vamoYvamo.module.js',

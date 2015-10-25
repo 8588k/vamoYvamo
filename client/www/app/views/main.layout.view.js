@@ -60,6 +60,10 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
                 that.refreshPeopleQuantity(peopleCollection);
             });
 
+            App.Events.on('button-pressed', function(event) {
+                that.buttonPressed(event);
+            });
+
             totalView = new Views.Total();
             this.totalRegion.show(totalView);
         },
@@ -125,6 +129,12 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
         refreshPeopleQuantity: function(collectionInstance) {
             $('.people-quantity input[type="number"]').val(collectionInstance.length);
         },
+
+        buttonPressed: function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            navigator.vibrate([10]);
+        }
 
     });
 });

@@ -11,6 +11,7 @@
   "homepage": "https://github.com/8588k/vamoYvamo",
   "devDependencies": {
     "del": "^1.2.0",
+    "fastclick": "^1.0.6",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^2.3.1",
     "gulp-concat": "^2.5.2",
