@@ -54,6 +54,7 @@ gulp.task('js-build', function() {
         'node_modules/fastclick/lib/fastclick.js',
         // app
         'www/app/app.js',
+        'www/app/admob.module.js',
         'www/app/vamoYvamo.module.js',
         'www/app/templates/templates.js',
         'www/app/utils/handlebars-helpers.js',

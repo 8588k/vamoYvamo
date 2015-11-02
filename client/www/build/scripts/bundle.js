@@ -27785,16 +27785,50 @@ Picker.extend( 'pickadate', DatePicker )
     win.App = App;
 
     // Start App app
-    $(function() {
+
+    document.addEventListener("deviceready", function() {
         App.start();
         FastClick.attach(document.body);
-    });
-    
+    }, false);
+
 }(window));
+App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
+    
+    Vamo.AdMob = Marionette.Object.extend({
+        ids: {},
+
+        initialize: function(options){
+            if( /(android)/i.test(navigator.userAgent) ) { 
+                this.ids = { // for Android
+                    interstitial: 'ca-app-pub-6869992474017983/1657046752'
+                };
+            } else if(/(ipod|iphone|ipad)/i.test(navigator.userAgent)) {
+                this.ids = { // for iOS
+                    interstitial: 'ca-app-pub-6869992474017983/7563979554'
+                };
+            } else {
+                this.ids = { // for Windows Phone
+                    interstitial: 'ca-app-pub-6869992474017983/1355127956'
+                };
+            }
+        },
+
+        showInterstitial: function(){
+            console.log('show!');
+            var a = AdMob.prepareInterstitial({
+                adId: this.ids.interstitial,
+                autoShow: true
+            });
+            console.log('show!2', a);
+        }
+    });
+
+});
 // 'use strict';
 
 App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
     var controller,
+        adds,
         Router;
 
     Router = Marionette.AppRouter.extend({
@@ -27812,10 +27846,14 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
         }
     };
 
+    
+
     App.onStart = function() {
         new Router({
             controller: controller
         });
+        adds = new Vamo.AdMob();
+        adds.showInterstitial();
     };
 });
 this["__templates"] = this["__templates"] || {};
@@ -28064,6 +28102,8 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
         events: {
             'touchstart @ui.add': 'addPerson',
             'touchstart @ui.remove': 'removeLastPerson',
+            'click @ui.add': 'addPerson',
+            'click @ui.remove': 'removeLastPerson',
             'input @ui.personNumber': 'addPeople'
         },
 

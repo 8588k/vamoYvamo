@@ -1,0 +1,32 @@
+App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
+    
+    Vamo.AdMob = Marionette.Object.extend({
+        ids: {},
+
+        initialize: function(options){
+            if( /(android)/i.test(navigator.userAgent) ) { 
+                this.ids = { // for Android
+                    interstitial: 'ca-app-pub-6869992474017983/1657046752'
+                };
+            } else if(/(ipod|iphone|ipad)/i.test(navigator.userAgent)) {
+                this.ids = { // for iOS
+                    interstitial: 'ca-app-pub-6869992474017983/7563979554'
+                };
+            } else {
+                this.ids = { // for Windows Phone
+                    interstitial: 'ca-app-pub-6869992474017983/1355127956'
+                };
+            }
+        },
+
+        showInterstitial: function(){
+            console.log('show!');
+            var a = AdMob.prepareInterstitial({
+                adId: this.ids.interstitial,
+                autoShow: true
+            });
+            console.log('show!2', a);
+        }
+    });
+
+});

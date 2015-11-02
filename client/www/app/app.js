@@ -23,9 +23,10 @@
     win.App = App;
 
     // Start App app
-    $(function() {
+
+    document.addEventListener("deviceready", function() {
         App.start();
         FastClick.attach(document.body);
-    });
-    
+    }, false);
+
 }(window));
