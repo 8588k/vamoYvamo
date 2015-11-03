@@ -29,4 +29,8 @@
         FastClick.attach(document.body);
     }, false);
 
+    document.addEventListener("resume", function() {
+        App.onResume();
+    }, false);
+
 }(window));

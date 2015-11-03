@@ -28,4 +28,35 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
 
         adds.showInterstitial();
     };
+
+
+    App.onResume = function() {
+        adds.showInterstitial();
+    };
+
+    App.share = function(){
+        var imageLink;
+
+        console.log('Calling from CapturePhoto');
+        navigator.screenshot.save(function(error,res){
+            if(error){
+                console.log('pincho:',error);
+            }else{
+                console.log('ok',res); //should be path/to/myScreenshot.jpg
+                //For android
+                imageLink = res.filePath;
+
+                if( /(android)/i.test(navigator.userAgent) ) { 
+
+                    window.plugins.socialsharing.share(null, null,'file://'+imageLink, null);
+
+                } else if(/(ipod|iphone|ipad)/i.test(navigator.userAgent)) {
+
+                    window.plugins.socialsharing.share(null, null, imageLink, null);
+                }
+
+            }
+        },'jpg',50,'myScreenShot');
+    };
+
 });

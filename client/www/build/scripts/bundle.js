@@ -27791,11 +27791,19 @@ Picker.extend( 'pickadate', DatePicker )
         FastClick.attach(document.body);
     }, false);
 
+    document.addEventListener("resume", function() {
+        App.onResume();
+    }, false);
+
 }(window));
 App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
     
     Vamo.AdMob = Marionette.Object.extend({
         ids: {},
+
+        lastShow: 0,
+
+        betweenShowDifference: 60000,
 
         initialize: function(options){
             if( /(android)/i.test(navigator.userAgent) ) { 
@@ -27814,10 +27822,15 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
         },
 
         showInterstitial: function(){
-            AdMob.prepareInterstitial({
-                adId: this.ids.interstitial,
-                autoShow: true
-            });
+            var now = new Date().getTime();
+            if((now-this.lastShow) > this.betweenShowDifference){
+
+                AdMob.prepareInterstitial({
+                    adId: this.ids.interstitial,
+                    autoShow: true
+                });
+                this.lastShow = now;
+            }
         }
     });
 
@@ -27852,11 +27865,42 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
 
         adds.showInterstitial();
     };
+
+
+    App.onResume = function() {
+        adds.showInterstitial();
+    };
+
+    App.share = function(){
+        var imageLink;
+
+        console.log('Calling from CapturePhoto');
+        navigator.screenshot.save(function(error,res){
+            if(error){
+                console.log('pincho:',error);
+            }else{
+                console.log('ok',res); //should be path/to/myScreenshot.jpg
+                //For android
+                imageLink = res.filePath;
+
+                if( /(android)/i.test(navigator.userAgent) ) { 
+
+                    window.plugins.socialsharing.share(null, null,'file://'+imageLink, null);
+
+                } else if(/(ipod|iphone|ipad)/i.test(navigator.userAgent)) {
+
+                    window.plugins.socialsharing.share(null, null, imageLink, null);
+                }
+
+            }
+        },'jpg',50,'myScreenShot');
+    };
+
 });
 this["__templates"] = this["__templates"] || {};
 this["__templates"]["vamo"] = this["__templates"]["vamo"] || {};
 this["__templates"]["vamo"]["actions"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<label for=\"personNumber\">Personas:</label><input type=\"number\" value=\"2\" min=\"0\" max=\"99\" id=\"personNumber\" class=\"person-number\" pattern=\"[0-9]{10}\">\n<input type=\"button\" value=\"+\" class=\"add\">\n<input type=\"button\" value=\"-\" class=\"remove\">";
+    return "<label for=\"personNumber\">Personas:</label><input type=\"number\" value=\"2\" min=\"0\" max=\"99\" id=\"personNumber\" class=\"person-number\" pattern=\"[0-9]{10}\">\n<input type=\"button\" value=\"+\" class=\"add\">\n<input type=\"button\" value=\"-\" class=\"remove\">\n<input type=\"button\" value=\"share\" class=\"share\">";
 },"useData":true});
 this["__templates"]["vamo"]["main"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     return "<header data-js=\"header\">Vamo & Vamo</header>\n<div data-js=\"actions\">Actions</div>\n<div data-js=\"rows\">Rows</div>\n<div class=\"total-price\" data-js=\"total\">Total</div>";
@@ -28093,7 +28137,8 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
         ui: {
             add: '.add',
             remove: '.remove',
-            personNumber: '.person-number'
+            personNumber: '.person-number',
+            share: '.share'
         },
 
         events: {
@@ -28101,10 +28146,17 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
             'touchstart @ui.remove': 'removeLastPerson',
             'click @ui.add': 'addPerson',
             'click @ui.remove': 'removeLastPerson',
+            'touchstart @ui.share': 'share',
+            'click @ui.share': 'share',
             'input @ui.personNumber': 'addPeople'
         },
 
         initialize: function() {},
+
+
+        share: function(event){
+            App.share();
+        },
 
         addPerson: function(event){
             App.Events.trigger('button-pressed', event);

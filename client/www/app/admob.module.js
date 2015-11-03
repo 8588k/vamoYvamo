@@ -3,6 +3,10 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
     Vamo.AdMob = Marionette.Object.extend({
         ids: {},
 
+        lastShow: 0,
+
+        betweenShowDifference: 60000,
+
         initialize: function(options){
             if( /(android)/i.test(navigator.userAgent) ) { 
                 this.ids = { // for Android
@@ -20,10 +24,15 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
         },
 
         showInterstitial: function(){
-            AdMob.prepareInterstitial({
-                adId: this.ids.interstitial,
-                autoShow: true
-            });
+            var now = new Date().getTime();
+            if((now-this.lastShow) > this.betweenShowDifference){
+
+                AdMob.prepareInterstitial({
+                    adId: this.ids.interstitial,
+                    autoShow: true
+                });
+                this.lastShow = now;
+            }
         }
     });
 
