@@ -5,7 +5,7 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
 
         lastShow: 0,
 
-        betweenShowDifference: 60000,
+        betweenShowDifference: 1000 * 60 * 5,
 
         initialize: function(options){
             if( /(android)/i.test(navigator.userAgent) ) { 
