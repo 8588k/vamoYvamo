@@ -20,12 +20,10 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
         },
 
         showInterstitial: function(){
-            console.log('show!');
-            var a = AdMob.prepareInterstitial({
+            AdMob.prepareInterstitial({
                 adId: this.ids.interstitial,
                 autoShow: true
             });
-            console.log('show!2', a);
         }
     });
 

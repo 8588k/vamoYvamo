@@ -4,7 +4,7 @@ this["__templates"]["vamo"]["actions"] = Handlebars.template({"compiler":[6,">= 
     return "<label for=\"personNumber\">Personas:</label><input type=\"number\" value=\"2\" min=\"0\" max=\"99\" id=\"personNumber\" class=\"person-number\" pattern=\"[0-9]{10}\">\n<input type=\"button\" value=\"+\" class=\"add\">\n<input type=\"button\" value=\"-\" class=\"remove\">";
 },"useData":true});
 this["__templates"]["vamo"]["main"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<header data-js=\"header\">Header</header>\n<div data-js=\"actions\">Actions</div>\n<div data-js=\"rows\">Rows</div>\n<div class=\"total-price\" data-js=\"total\">Total</div>";
+    return "<header data-js=\"header\">Vamo & Vamo</header>\n<div data-js=\"actions\">Actions</div>\n<div data-js=\"rows\">Rows</div>\n<div class=\"total-price\" data-js=\"total\">Total</div>";
 },"useData":true});
 this["__templates"]["vamo"]["person"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
     var helper;

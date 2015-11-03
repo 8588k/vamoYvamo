@@ -20,13 +20,12 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
         }
     };
 
-    
-
     App.onStart = function() {
         new Router({
             controller: controller
         });
         adds = new Vamo.AdMob();
+
         adds.showInterstitial();
     };
 });
