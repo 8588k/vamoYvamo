@@ -27803,7 +27803,7 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
 
         lastShow: 0,
 
-        betweenShowDifference: 60000,
+        betweenShowDifference: 1000 * 60 * 5,
 
         initialize: function(options){
             if( /(android)/i.test(navigator.userAgent) ) { 
@@ -28205,6 +28205,15 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
             App.Events.on('person-message', function(peopleTotal) {
                 that.refreshStatusMsg(peopleTotal);
             });
+        },
+
+        onRender: function() {
+            var that = this;
+
+            document.addEventListener("deviceready", function() {
+                cordova.plugins.Focus.focus(that.ui.money);
+                cordova.plugins.Focus.focus(that.ui.name);
+            }, false);
         },
 
         moneyChange: function() {

@@ -30,6 +30,15 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
             });
         },
 
+        onRender: function() {
+            var that = this;
+
+            document.addEventListener("deviceready", function() {
+                cordova.plugins.Focus.focus(that.ui.money);
+                cordova.plugins.Focus.focus(that.ui.name);
+            }, false);
+        },
+
         moneyChange: function() {
             var $moneyInput = this.$el.find('input[type="number"]'),
                 newMoneyValue = $moneyInput.val();
