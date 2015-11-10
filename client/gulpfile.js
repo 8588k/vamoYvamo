@@ -61,6 +61,7 @@ gulp.task('js-build', function() {
         'www/app/models/*.js',
         'www/app/collections/*.js',
         'www/app/views/main.layout.view.js',
+        'www/app/views/header.item.view.js',
         'www/app/views/actions.item.view.js',
         'www/app/views/person.item.view.js',
         'www/app/views/people.collection.view.js',
@@ -88,8 +89,14 @@ gulp.task('styles-build', function() {
         .pipe(gulp.dest('www/build/styles/'));
 });
 
-// gulp.task('default', ['del-build', 'templates', 'js-build', 'styles-build']);
-gulp.task('default', ['del-build', 'templates', 'js-build', 'styles-build']);
+gulp.task('fonts-build', function() {
+    gulp.src([
+            'node_modules/materialize-css/dist/font/**/*.+(eot|svg|ttf|woff|otf)'
+        ])
+        .pipe(gulp.dest('www/build/font')).on('error', errorHandler);
+});
+
+gulp.task('default', ['del-build', 'templates', 'js-build', 'styles-build', 'fonts-build']);
 
 gulp.task('build', ['default']);
 
@@ -104,3 +111,8 @@ gulp.task('watch', function() {
     ], ['default']);
     gulp.watch('www/app/styles/*.css', ['styles-build']);
 });
+
+function errorHandler (error) {
+  console.log(error.toString());
+  this.emit('end');
+}

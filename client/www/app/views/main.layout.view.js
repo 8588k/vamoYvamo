@@ -25,8 +25,8 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
                 peopleCollectionView,
                 totalView;
 
-            // headerView = new Views.Header();
-            // this.headerRegion.show(headerView);
+            headerView = new Views.Header();
+            this.headerRegion.show(headerView);
 
             actionsView = new Views.Actions();
             this.actionsRegion.show(actionsView);
