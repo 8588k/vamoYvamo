@@ -27844,7 +27844,8 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
 
     Router = Marionette.AppRouter.extend({
         'appRoutes': {
-            '': 'index'
+            '': 'index',
+            'reset': 'reset'
         }
     });
 
@@ -27854,6 +27855,10 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
 
             mainLayoutView = new Vamo.Views.Main();
             App.mainRegion.show(mainLayoutView);
+        },
+
+        reset: function() {
+            this.index();
         }
     };
 
@@ -27874,7 +27879,6 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
     App.share = function(){
         var imageLink;
 
-        console.log('Calling from CapturePhoto');
         navigator.screenshot.save(function(error,res){
             if(error){
                 console.log('pincho:',error);
@@ -27900,10 +27904,10 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
 this["__templates"] = this["__templates"] || {};
 this["__templates"]["vamo"] = this["__templates"]["vamo"] || {};
 this["__templates"]["vamo"]["actions"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<label for=\"personNumber\">Personas:</label><input type=\"number\" value=\"2\" min=\"0\" max=\"99\" id=\"personNumber\" class=\"person-number\" pattern=\"[0-9]{10}\">\n<input type=\"button\" value=\"+\" class=\"add\">\n<input type=\"button\" value=\"-\" class=\"remove\">\n<input type=\"button\" value=\"share\" class=\"share\">";
+    return "<label for=\"personNumber\">Personas:</label><input type=\"number\" value=\"2\" min=\"0\" max=\"99\" id=\"personNumber\" class=\"person-number\" pattern=\"[0-9]{10}\">\n<input type=\"button\" value=\"+\" class=\"add\">\n<input type=\"button\" value=\"-\" class=\"remove\">";
 },"useData":true});
 this["__templates"]["vamo"]["header"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "Vamo & Vamo\n<i class=\"material-icons right\" data-js=\"options\">more_vert</i>";
+    return "Vamo & Vamo\n\n<a class='dropdown-button material-icons right' href='#' data-activates='dropdown'>more_vert</a>\n\n<ul id='dropdown' class='dropdown-content'>\n	<li>\n		<a href=\"#\" data-js=\"share\">Compartir</a>\n	</li>\n	<li class=\"divider\"></li>\n	<li>\n		<a href=\"#\" data-js=\"reset\">Borrar</a>\n	</li>\n</ul>";
 },"useData":true});
 this["__templates"]["vamo"]["main"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     return "<header data-js=\"header\">Header</header>\n<div data-js=\"actions\">Actions</div>\n<div data-js=\"rows\">Rows</div>\n<div class=\"total-price\" data-js=\"total\">Total</div>";
@@ -28136,17 +28140,35 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
         template: __templates.vamo.header,
 
         ui: {
-            options: '[data-js="options"]'
+            share: '[data-js="share"]',
+            reset: '[data-js="reset"]'
         },
 
         events: {
-            'touchstart @ui.options': 'showOptions'
+            'touchstart @ui.options': 'showOptions',
+            'touchstart @ui.share': 'share',
+            'touchstart @ui.reset': 'reset'
         },
 
-        showOptions: function() {
-            console.log("showOptions =)");
-        }
+        onShow: function() {
+            $('.dropdown-button').dropdown({
+                inDuration: 300,
+                outDuration: 225,
+                constrain_width: false, // Does not change width of dropdown to that of the activator
+                hover: false, // Activate on hover
+                gutter: 0, // Spacing from edge
+                belowOrigin: true, // Displays dropdown below the button
+                alignment: 'left' // Displays dropdown with edge aligned to the left of button
+            });
+        },
 
+        share: function(event){
+            App.share();
+        },
+
+        reset: function(event){
+            Backbone.history.navigate('reset', {trigger:true});
+        }
     });
 });
 // 'use strict';
@@ -28162,25 +28184,13 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
         ui: {
             add: '.add',
             remove: '.remove',
-            personNumber: '.person-number',
-            share: '.share'
+            personNumber: '.person-number'
         },
 
         events: {
             'touchstart @ui.add': 'addPerson',
             'touchstart @ui.remove': 'removeLastPerson',
-            'click @ui.add': 'addPerson',
-            'click @ui.remove': 'removeLastPerson',
-            'touchstart @ui.share': 'share',
-            'click @ui.share': 'share',
             'input @ui.personNumber': 'addPeople'
-        },
-
-        initialize: function() {},
-
-
-        share: function(event){
-            App.share();
         },
 
         addPerson: function(event){

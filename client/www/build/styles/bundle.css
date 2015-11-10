@@ -8165,6 +8165,12 @@ header {
         margin-top: 8px;
     }
 
+    header a {
+        color: #fff;
+        font-family: Arial, Helvetica, Sans-serif;
+        margin-top: 8px;
+    }
+
 
 /* Inputs
 ---------------------------------------------------------------*/
@@ -8381,3 +8387,15 @@ input::-webkit-inner-spin-button {
     .total-price p {
         margin: 0;
     }
+
+
+/* Dropdown
+---------------------------------------------------------------*/
+
+.dropdown-button {
+    z-index: 10;
+}
+
+.dropdown-content {
+    top: 40px !important;
+}

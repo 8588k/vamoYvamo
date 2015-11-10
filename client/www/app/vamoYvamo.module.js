@@ -7,7 +7,8 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
 
     Router = Marionette.AppRouter.extend({
         'appRoutes': {
-            '': 'index'
+            '': 'index',
+            'reset': 'reset'
         }
     });
 
@@ -17,6 +18,10 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
 
             mainLayoutView = new Vamo.Views.Main();
             App.mainRegion.show(mainLayoutView);
+        },
+
+        reset: function() {
+            this.index();
         }
     };
 
@@ -37,7 +42,6 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
     App.share = function(){
         var imageLink;
 
-        console.log('Calling from CapturePhoto');
         navigator.screenshot.save(function(error,res){
             if(error){
                 console.log('pincho:',error);

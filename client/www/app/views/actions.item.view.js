@@ -11,25 +11,13 @@ App.module('Vamo.Views', function (Views, App, Backbone, Marionette, $, _) {
         ui: {
             add: '.add',
             remove: '.remove',
-            personNumber: '.person-number',
-            share: '.share'
+            personNumber: '.person-number'
         },
 
         events: {
             'touchstart @ui.add': 'addPerson',
             'touchstart @ui.remove': 'removeLastPerson',
-            'click @ui.add': 'addPerson',
-            'click @ui.remove': 'removeLastPerson',
-            'touchstart @ui.share': 'share',
-            'click @ui.share': 'share',
             'input @ui.personNumber': 'addPeople'
-        },
-
-        initialize: function() {},
-
-
-        share: function(event){
-            App.share();
         },
 
         addPerson: function(event){
