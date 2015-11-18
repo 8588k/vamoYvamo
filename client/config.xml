@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.vamoYvamo" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>VamoYVamo</name>
+    <name>Vamo & Vamo</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        ¡Dividí los gastos en un paso de forma fácil y compartilo con tus amigos!
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="8588kb@gmail.com">
+        8588kb Team
     </author>
     <content src="index.html" />
     <plugin name="cordova-plugin-whitelist" version="1" />
@@ -22,6 +22,10 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <icon src="www/res/android/logo_36x36.png" density="ldpi" />
+        <icon src="www/res/android/logo_48x48.png" density="mdpi" />
+        <icon src="www/res/android/logo_72x72.png" density="hdpi" />
+        <icon src="www/res/android/logo_96x96.png" density="xhdpi" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
