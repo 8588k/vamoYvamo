@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.vamoYvamo" version="0.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.vamoYvamo" version="0.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Vamo &amp; Vamo</name>
     <description>
-        ¡Dividí los gastos en un paso de forma fácil y compartilo con tus amigos!
+        ¡Dividí los gastos con "Vamo y Vamo" en un paso de forma fácil y compartilo con tus amigos!
     </description>
     <author email="8588kb@gmail.com">
         8588kb Team
