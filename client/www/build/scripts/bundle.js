@@ -27808,7 +27808,7 @@ App.module('Vamo', function (Vamo, App, Backbone, Marionette, $, _) {
         initialize: function(options){
             if( /(android)/i.test(navigator.userAgent) ) { 
                 this.ids = { // for Android
-                    interstitial: 'ca-app-pub-6869992474017983/1657046752'
+                    interstitial: 'ca-app-pub-5913386662735594/6263217463'
                 };
             } else if(/(ipod|iphone|ipad)/i.test(navigator.userAgent)) {
                 this.ids = { // for iOS
@@ -27977,7 +27977,7 @@ App.module('Vamo.Models', function (Models, App, Backbone, Marionette, $, _) {
     
     Models.Person = Backbone.Model.extend({
         defaults: {
-            'name': 'Persona',
+            'name': 'Nombre',
             'money': 0
         }
     });

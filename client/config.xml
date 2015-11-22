@@ -22,6 +22,7 @@
     <platform name="android">
         <preference name="android-minSdkVersion" value="14" />
         <preference name="android-targetSdkVersion" value="17" />
+        <preference name="loadUrlTimeoutValue" value="60000" />
         <allow-intent href="market:*" />
         <icon density="ldpi" src="www/res/android/logo_36x36.png" />
         <icon density="mdpi" src="www/res/android/logo_48x48.png" />

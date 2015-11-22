@@ -4,7 +4,7 @@ App.module('Vamo.Models', function (Models, App, Backbone, Marionette, $, _) {
     
     Models.Person = Backbone.Model.extend({
         defaults: {
-            'name': 'Persona',
+            'name': 'Nombre',
             'money': 0
         }
     });
